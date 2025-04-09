@@ -3,7 +3,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatCard from "@/components/dashboard/StatCard";
-import { AlertTriangle, MapPin, BarChart, Cloud, Road } from "lucide-react";
+import { AlertTriangle, MapPin, BarChart, Cloud, MapIcon } from "lucide-react";
 
 const RiskMapPage = () => {
   // In a real application, this would be an interactive map with actual data
@@ -104,7 +104,7 @@ const RiskMapPage = () => {
                     title="Hazardous Road Design"
                     value="23"
                     description="Locations with road design issues"
-                    icon={<Road size={20} />}
+                    icon={<MapIcon size={20} />}
                   />
                   
                   <StatCard

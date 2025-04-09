@@ -3,7 +3,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ChartCard from "@/components/dashboard/ChartCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertTriangle, BarChart2, Clock, Cloud, Road, Thermometer, Users } from "lucide-react";
+import { AlertTriangle, BarChart2, Clock, Cloud, MapIcon, Thermometer, Users } from "lucide-react";
 
 const Factors = () => {
   // Sample data for the charts - in a real app, this would come from an API
@@ -107,7 +107,7 @@ const Factors = () => {
                   
                   <div className="flex space-x-3">
                     <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Road size={20} className="text-primary" />
+                      <MapIcon size={20} className="text-primary" />
                     </div>
                     <div>
                       <p className="font-medium">Environmental Impact</p>
@@ -341,7 +341,7 @@ const Factors = () => {
                       
                       <div className="mt-6 pt-6 border-t">
                         <div className="flex space-x-3">
-                          <Road size={24} className="text-primary" />
+                          <MapIcon size={24} className="text-primary" />
                           <div>
                             <p className="font-medium">Key Finding</p>
                             <p className="text-sm text-muted-foreground">

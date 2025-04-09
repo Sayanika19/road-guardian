@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RiskFactorCard from "@/components/assessment/RiskFactorCard";
-import { AlertTriangle, Calendar, Cloud, MapPin, Road, ThermometerSnowflake, Users } from "lucide-react";
+import { AlertTriangle, Calendar, Cloud, MapPin, MapIcon, ThermometerSnowflake, Users } from "lucide-react";
 import { useState } from "react";
 
 const Assessment = () => {
@@ -298,7 +298,7 @@ const Assessment = () => {
                     
                     <div className="rounded-lg p-4 bg-primary/10 border border-primary/20">
                       <div className="flex items-center space-x-2">
-                        <Road size={20} className="text-primary" />
+                        <MapIcon size={20} className="text-primary" />
                         <p className="font-medium">Top Factors</p>
                       </div>
                       <ul className="mt-2 text-sm space-y-1">
@@ -362,7 +362,7 @@ const Assessment = () => {
                 title="Road Conditions"
                 description="Current surface and visibility conditions"
                 value={45}
-                icon={<Road size={20} />}
+                icon={<MapIcon size={20} />}
               />
               
               <RiskFactorCard

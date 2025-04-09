@@ -18,11 +18,12 @@ import {
   Filter, 
   Lightbulb, 
   MapPin, 
-  Road, 
+  MapIcon, 
   School, 
   ShieldCheck, 
   Timer, 
-  UserCheck 
+  UserCheck,
+  Users as UsersIcon
 } from "lucide-react";
 import SafetyCard from "@/components/recommendations/SafetyCard";
 
@@ -61,7 +62,7 @@ const Recommendations = () => {
       description: "Repair deteriorating road surfaces on Highway 101 between mile markers 23-28.",
       category: "Infrastructure",
       impact: "medium" as const,
-      icon: <Road size={20} />,
+      icon: <MapIcon size={20} />,
       implementationSteps: [
         "Schedule repairs during low-traffic periods",
         "Use high-durability materials for longer lifespan",
@@ -203,7 +204,7 @@ const Recommendations = () => {
                     High-Risk Areas
                   </Button>
                   <Button variant="outline" className="justify-start">
-                    <Users className="mr-2 h-4 w-4" />
+                    <UsersIcon className="mr-2 h-4 w-4" />
                     School Zones
                   </Button>
                 </div>
@@ -213,7 +214,7 @@ const Recommendations = () => {
                 <label className="text-sm font-medium">Recommendation Type</label>
                 <div className="grid grid-cols-2 gap-2">
                   <Button variant="outline" className="justify-start">
-                    <Road className="mr-2 h-4 w-4" />
+                    <MapIcon className="mr-2 h-4 w-4" />
                     Infrastructure
                   </Button>
                   <Button variant="outline" className="justify-start">
