@@ -108,7 +108,7 @@ const SideNav = ({ className }: SideNavProps) => {
         <div className="p-4 flex items-center h-16">
           <Shield className="h-6 w-6 text-white" />
           {!isCollapsed && (
-            <span className="ml-2 font-bold text-lg">Road Guardian AI</span>
+            <span className="ml-2 font-bold text-lg">Road Rakshak</span>
           )}
         </div>
 

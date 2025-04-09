@@ -42,9 +42,9 @@ const Auth = () => {
           <div className="flex justify-center mb-4">
             <Shield size={64} />
           </div>
-          <h1 className="text-3xl font-bold mb-4">Road Guardian AI</h1>
+          <h1 className="text-3xl font-bold mb-2">Road Rakshak</h1>
           <p className="text-lg mb-8">
-            Advanced machine learning solution for predicting and preventing road accidents.
+            Predict. Prevent. Protect.
           </p>
           
           <div className="grid grid-cols-2 gap-4 text-left">
@@ -83,7 +83,7 @@ const Auth = () => {
             <div className="flex justify-center mb-4 md:hidden">
               <Shield size={48} className="text-primary" />
             </div>
-            <h2 className="text-2xl font-bold mb-2">Welcome to Road Guardian AI</h2>
+            <h2 className="text-2xl font-bold mb-2">Welcome to Road Rakshak</h2>
             <p className="text-muted-foreground">
               Sign in to access the road safety analytics platform
             </p>
