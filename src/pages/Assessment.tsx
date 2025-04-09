@@ -1,4 +1,3 @@
-
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,23 +7,47 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RiskFactorCard from "@/components/assessment/RiskFactorCard";
 import { AlertTriangle, Calendar, Cloud, MapPin, MapIcon, ThermometerSnowflake, Users } from "lucide-react";
 import { useState } from "react";
+import { PredictionInput } from "@/types/prediction";
+import { usePrediction } from "@/hooks/usePrediction";
+import { toast } from "sonner";
 
 const Assessment = () => {
-  const [predictedRisk, setPredictedRisk] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<PredictionInput>({
+    roadType: "urban",
+    location: "",
+    speedLimit: 35,
+    roadCondition: "good",
+    timeOfDay: "evening",
+    dayOfWeek: "weekday",
+    weather: "clear",
+    visibility: "good",
+    driverAge: "adult",
+    trafficDensity: "medium",
+    vehicleType: "car",
+    historicalRate: "average"
+  });
+  
+  const { predictRisk, predictionResult, isLoading } = usePrediction();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (field: keyof PredictionInput, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     
-    // In a real app, this would send the data to an API for prediction
-    // For demo purposes, we're just simulating an API call
-    setTimeout(() => {
-      // Generate a random risk score between 35 and 85
-      const risk = Math.floor(Math.random() * 50) + 35;
-      setPredictedRisk(risk);
-      setIsLoading(false);
-    }, 1500);
+    try {
+      const result = await predictRisk(formData);
+      if (result) {
+        toast.success("Risk assessment completed successfully");
+      }
+    } catch (error) {
+      toast.error("Failed to complete risk assessment");
+      console.error("Prediction error:", error);
+    }
   };
 
   return (
@@ -58,7 +81,10 @@ const Assessment = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Road Type</label>
-                        <Select defaultValue="urban">
+                        <Select 
+                          value={formData.roadType}
+                          onValueChange={(value) => handleChange("roadType", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select road type" />
                           </SelectTrigger>
@@ -74,12 +100,19 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Location</label>
-                        <Input placeholder="Enter address or coordinates" />
+                        <Input 
+                          placeholder="Enter address or coordinates" 
+                          value={formData.location}
+                          onChange={(e) => handleChange("location", e.target.value)}
+                        />
                       </div>
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Speed Limit (mph)</label>
-                        <Select defaultValue="35">
+                        <Select 
+                          value={formData.speedLimit?.toString()}
+                          onValueChange={(value) => handleChange("speedLimit", parseInt(value))}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select speed limit" />
                           </SelectTrigger>
@@ -95,7 +128,10 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Road Condition</label>
-                        <Select defaultValue="good">
+                        <Select
+                          value={formData.roadCondition}
+                          onValueChange={(value) => handleChange("roadCondition", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select condition" />
                           </SelectTrigger>
@@ -114,7 +150,10 @@ const Assessment = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Time of Day</label>
-                        <Select defaultValue="evening">
+                        <Select
+                          value={formData.timeOfDay}
+                          onValueChange={(value) => handleChange("timeOfDay", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select time" />
                           </SelectTrigger>
@@ -129,7 +168,10 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Day of Week</label>
-                        <Select defaultValue="weekday">
+                        <Select
+                          value={formData.dayOfWeek}
+                          onValueChange={(value) => handleChange("dayOfWeek", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select day" />
                           </SelectTrigger>
@@ -142,7 +184,10 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Weather</label>
-                        <Select defaultValue="clear">
+                        <Select
+                          value={formData.weather}
+                          onValueChange={(value) => handleChange("weather", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select weather" />
                           </SelectTrigger>
@@ -157,7 +202,10 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Visibility</label>
-                        <Select defaultValue="good">
+                        <Select
+                          value={formData.visibility}
+                          onValueChange={(value) => handleChange("visibility", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select visibility" />
                           </SelectTrigger>
@@ -175,7 +223,10 @@ const Assessment = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Driver Age Group</label>
-                        <Select defaultValue="adult">
+                        <Select
+                          value={formData.driverAge}
+                          onValueChange={(value) => handleChange("driverAge", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select age group" />
                           </SelectTrigger>
@@ -190,7 +241,10 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Traffic Density</label>
-                        <Select defaultValue="medium">
+                        <Select
+                          value={formData.trafficDensity}
+                          onValueChange={(value) => handleChange("trafficDensity", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select density" />
                           </SelectTrigger>
@@ -204,7 +258,10 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Vehicle Type</label>
-                        <Select defaultValue="car">
+                        <Select
+                          value={formData.vehicleType}
+                          onValueChange={(value) => handleChange("vehicleType", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select vehicle" />
                           </SelectTrigger>
@@ -220,7 +277,10 @@ const Assessment = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium">Historical Accident Rate</label>
-                        <Select defaultValue="average">
+                        <Select
+                          value={formData.historicalRate}
+                          onValueChange={(value) => handleChange("historicalRate", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select rate" />
                           </SelectTrigger>
@@ -245,7 +305,7 @@ const Assessment = () => {
             </CardContent>
           </Card>
           
-          {predictedRisk !== null && (
+          {predictionResult && (
             <Card>
               <CardHeader>
                 <CardTitle>Risk Prediction Results</CardTitle>
@@ -259,18 +319,21 @@ const Assessment = () => {
                     <div 
                       className={`
                         h-32 w-32 rounded-full flex items-center justify-center border-8
-                        ${predictedRisk < 40 ? 'border-green-500 bg-green-100' : ''}
-                        ${predictedRisk >= 40 && predictedRisk < 60 ? 'border-yellow-500 bg-yellow-100' : ''}
-                        ${predictedRisk >= 60 && predictedRisk < 80 ? 'border-orange-500 bg-orange-100' : ''}
-                        ${predictedRisk >= 80 ? 'border-red-500 bg-red-100' : ''}
+                        ${predictionResult.riskScore.overall < 40 ? 'border-green-500 bg-green-100' : ''}
+                        ${predictionResult.riskScore.overall >= 40 && predictionResult.riskScore.overall < 60 ? 'border-yellow-500 bg-yellow-100' : ''}
+                        ${predictionResult.riskScore.overall >= 60 && predictionResult.riskScore.overall < 80 ? 'border-orange-500 bg-orange-100' : ''}
+                        ${predictionResult.riskScore.overall >= 80 ? 'border-red-500 bg-red-100' : ''}
                       `}
                     >
-                      <span className="text-3xl font-bold">{predictedRisk}%</span>
+                      <span className="text-3xl font-bold">{Math.round(predictionResult.riskScore.overall)}%</span>
                     </div>
                     <p className="mt-4 font-semibold text-lg">
-                      {predictedRisk < 40 ? 'Low Risk' : 
-                       predictedRisk < 60 ? 'Moderate Risk' : 
-                       predictedRisk < 80 ? 'High Risk' : 'Critical Risk'}
+                      {predictionResult.riskScore.overall < 40 ? 'Low Risk' : 
+                       predictionResult.riskScore.overall < 60 ? 'Moderate Risk' : 
+                       predictionResult.riskScore.overall < 80 ? 'High Risk' : 'Critical Risk'}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Prediction confidence: {Math.round(predictionResult.riskScore.confidence)}%
                     </p>
                   </div>
                   
@@ -278,20 +341,20 @@ const Assessment = () => {
                     <div 
                       className={`
                         rounded-lg p-4 border
-                        ${predictedRisk < 40 ? 'bg-green-50 border-green-200' : ''}
-                        ${predictedRisk >= 40 && predictedRisk < 60 ? 'bg-yellow-50 border-yellow-200' : ''}
-                        ${predictedRisk >= 60 && predictedRisk < 80 ? 'bg-orange-50 border-orange-200' : ''}
-                        ${predictedRisk >= 80 ? 'bg-red-50 border-red-200' : ''}
+                        ${predictionResult.riskScore.overall < 40 ? 'bg-green-50 border-green-200' : ''}
+                        ${predictionResult.riskScore.overall >= 40 && predictionResult.riskScore.overall < 60 ? 'bg-yellow-50 border-yellow-200' : ''}
+                        ${predictionResult.riskScore.overall >= 60 && predictionResult.riskScore.overall < 80 ? 'bg-orange-50 border-orange-200' : ''}
+                        ${predictionResult.riskScore.overall >= 80 ? 'bg-red-50 border-red-200' : ''}
                       `}
                     >
                       <div className="flex items-center space-x-2">
-                        <AlertTriangle size={20} className={predictedRisk >= 60 ? 'text-red-500' : 'text-yellow-500'} />
+                        <AlertTriangle size={20} className={predictionResult.riskScore.overall >= 60 ? 'text-red-500' : 'text-yellow-500'} />
                         <p className="font-medium">Risk Level</p>
                       </div>
                       <p className="mt-2 text-sm">
-                        {predictedRisk < 40 ? 'This scenario shows a low likelihood of accidents.' : 
-                         predictedRisk < 60 ? 'Moderate risk factors present in this scenario.' : 
-                         predictedRisk < 80 ? 'Multiple significant risk factors detected.' : 
+                        {predictionResult.riskScore.overall < 40 ? 'This scenario shows a low likelihood of accidents.' : 
+                         predictionResult.riskScore.overall < 60 ? 'Moderate risk factors present in this scenario.' : 
+                         predictionResult.riskScore.overall < 80 ? 'Multiple significant risk factors detected.' : 
                          'Critical risk level - immediate attention recommended.'}
                       </p>
                     </div>
@@ -302,10 +365,12 @@ const Assessment = () => {
                         <p className="font-medium">Top Factors</p>
                       </div>
                       <ul className="mt-2 text-sm space-y-1">
-                        {predictedRisk >= 60 && <li>• Evening rush hour timing</li>}
-                        {predictedRisk >= 50 && <li>• Intersection location</li>}
-                        {predictedRisk >= 40 && <li>• Weather conditions</li>}
-                        <li>• Historical accident patterns</li>
+                        {predictionResult.topFactors.map((factor, index) => (
+                          <li key={index}>• {factor.factor === 'roadDesign' ? 'Road design' : 
+                                             factor.factor === 'trafficDensity' ? 'Traffic density' : 
+                                             factor.factor === 'vehicleType' ? 'Vehicle type' : 
+                                             factor.factor}</li>
+                        ))}
                       </ul>
                     </div>
                     
@@ -315,11 +380,37 @@ const Assessment = () => {
                         <p className="font-medium">Recommendations</p>
                       </div>
                       <ul className="mt-2 text-sm space-y-1">
-                        {predictedRisk >= 40 && <li>• Reduce speed in adverse conditions</li>}
-                        {predictedRisk >= 60 && <li>• Consider alternative routes</li>}
-                        {predictedRisk >= 80 && <li>• Avoid travel if possible</li>}
-                        <li>• Maintain increased awareness</li>
+                        {predictionResult.recommendations.map((recommendation, index) => (
+                          <li key={index}>• {recommendation}</li>
+                        ))}
                       </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                    <h3 className="font-medium mb-2">Risk Factor Analysis</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(predictionResult.riskScore.factors).map(([factor, value]) => (
+                        value && value > 0 ? (
+                          <div key={factor} className="flex items-center space-x-2">
+                            <div className="w-1/3 text-sm">{factor === 'roadDesign' ? 'Road Design' : 
+                                                           factor === 'trafficDensity' ? 'Traffic Density' : 
+                                                           factor === 'vehicleType' ? 'Vehicle Type' : 
+                                                           factor}</div>
+                            <div className="w-2/3 h-2 bg-gray-200 rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full rounded-full ${
+                                  value < 30 ? 'bg-green-500' : 
+                                  value < 50 ? 'bg-yellow-500' : 
+                                  value < 70 ? 'bg-orange-500' : 
+                                  'bg-red-500'
+                                }`} 
+                                style={{ width: `${Math.min(value, 100)}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        ) : null
+                      ))}
                     </div>
                   </div>
                 </div>
